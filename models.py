@@ -1,6 +1,24 @@
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Text, Integer, VARCHAR, DateTime, ForeignKey
+from sqlalchemy import Column, Text, Integer, VARCHAR, DateTime, ForeignKey, create_engine
+from sqlalchemy.orm import sessionmaker
 from datetime import datetime
+
+# connect to our chama db
+engine = create_engine('sqlite:///chama.db', echo=True)
+
+# create a session
+Session = sessionmaker(bind=engine)
+
+# create an instance of the session
+def get_db():
+    db = Session()
+    try:
+        yield db
+    except:
+        # handle db connection error
+        pass
+    finally:
+        db.close()
 
 # create a base model
 Base = declarative_base()
