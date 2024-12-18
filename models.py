@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker, relationship
 from datetime import datetime
 
 # connect to our chama db
-engine = create_engine('sqlite:///chama.db', echo=True)
+engine = create_engine('postgresql://admin:E0ynO9yalo33aNxlDqrceAzn2SAQwJZ8@dpg-cth88nhu0jms738141k0-a.frankfurt-postgres.render.com/chama_c82a', echo=True)
 
 # create a session
 Session = sessionmaker(bind=engine)
@@ -35,6 +35,8 @@ class User(Base):
     name = Column(Text(), nullable=False)
     email = Column(VARCHAR(), nullable=True, unique=True)
     phone = Column(VARCHAR(), nullable=False, unique=True)
+    # https://www.christianitytoday.com/wp-content/uploads/2024/02/139045.jpg?w=1920
+    # avatar = Column(VARCHAR, nullable= True)
     created_at = Column(DateTime(), default=datetime.now())
 
     # one to many
@@ -43,7 +45,7 @@ class User(Base):
     # patients = relationship("Patient", backref="doctor")
 
 class Saving(Base):
-    __tablename__ = "savings"
+    __tablename__ = "my_savings"
 
     id = Column(Integer(), primary_key=True)
     amount = Column(Integer(), nullable=False)
