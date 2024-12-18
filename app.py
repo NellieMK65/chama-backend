@@ -1,9 +1,9 @@
 # import fastapi
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy.orm import Session
-from models import get_db, User
-from schemas import CreateUserSchema
+from sqlalchemy.orm import Session, joinedload
+from models import get_db, User, Saving
+from schemas import CreateUserSchema, CreateSavingSchema
 
 # create an instance of fastapi
 app = FastAPI()
@@ -50,3 +50,24 @@ def update_user(user_id: int):
 def delete_user(user_id: int):
     print(user_id)
     return { "message": "User deleted successfully" }
+
+@app.post('/savings')
+def create_saving(input: CreateSavingSchema, session: Session = Depends(get_db)):
+    saving = Saving(**input.model_dump())
+
+    session.add(saving)
+    session.commit()
+
+    return { "message": "Saving added successfully" }
+
+@app.get('/savings/{saving_id}')
+def get_saving(saving_id: int, session: Session = Depends(get_db)):
+    saving = session.query(Saving).options(joinedload(Saving.user)).filter(Saving.id == saving_id).first()
+
+    return saving
+
+@app.get('/savings')
+def get_savings(session: Session = Depends(get_db)):
+    savings = session.query(Saving).options(joinedload(Saving.user)).all()
+
+    return savings

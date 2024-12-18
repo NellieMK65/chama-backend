@@ -1,6 +1,6 @@
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Text, Integer, VARCHAR, DateTime, ForeignKey, create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, relationship
 from datetime import datetime
 
 # connect to our chama db
@@ -36,6 +36,11 @@ class User(Base):
     email = Column(VARCHAR(), nullable=True, unique=True)
     phone = Column(VARCHAR(), nullable=False, unique=True)
     created_at = Column(DateTime(), default=datetime.now())
+
+    # one to many
+    savings = relationship("Saving", backref="user")
+
+    # patients = relationship("Patient", backref="doctor")
 
 class Saving(Base):
     __tablename__ = "savings"
