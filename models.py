@@ -4,6 +4,7 @@ from sqlalchemy.orm import sessionmaker, relationship
 from datetime import datetime
 
 # connect to our chama db
+# ! THE DB URL should added using environment variables
 engine = create_engine('postgresql://admin:E0ynO9yalo33aNxlDqrceAzn2SAQwJZ8@dpg-cth88nhu0jms738141k0-a.frankfurt-postgres.render.com/chama_c82a', echo=True)
 
 # create a session
@@ -14,9 +15,9 @@ def get_db():
     db = Session()
     try:
         yield db
-    except:
-        # handle db connection error
-        pass
+    # except:
+    #     # handle db connection error
+    #     pass
     finally:
         db.close()
 
@@ -45,7 +46,7 @@ class User(Base):
     # patients = relationship("Patient", backref="doctor")
 
 class Saving(Base):
-    __tablename__ = "my_savings"
+    __tablename__ = "savings"
 
     id = Column(Integer(), primary_key=True)
     amount = Column(Integer(), nullable=False)
